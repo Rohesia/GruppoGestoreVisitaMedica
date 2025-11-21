@@ -80,6 +80,8 @@ def aggiungi_checkup():
     except ValueError:
         print("Formato data non valido.")
         return
+
+    # crea e registra il check-up direttamente nel file CSV
     CheckUp(data, f"{tipo}: {note}", p)
     print("Check-up aggiunto e registrato su file.")
 
@@ -93,6 +95,8 @@ def accetta_checkup():
     if not os.path.exists(filename):
         print("Nessun check-up registrato per questo paziente.")
         return
+
+    # raccoglie i check-up non accettati
     checkups = []
     with open(filename, "r") as f:
         reader = csv.reader(f)
@@ -114,7 +118,7 @@ def accetta_checkup():
         print("Scelta non valida.")
         return
 
-    # aggiornare il file CSV
+    # aggiorna il file CSV
     selected = checkups[int(scelta)-1]
     rows = []
     with open(filename, "r") as f:
@@ -127,3 +131,10 @@ def accetta_checkup():
         writer = csv.writer(f)
         writer.writerows(rows)
     print("Check-up accettato!")
+
+def mostra_visite_paziente():
+    """Mostra tutte le visite di un paziente selezionato dal file CSV."""
+    p = seleziona_paziente()
+    if not p:
+        return
+    CheckUp.print_by_patience(p)
