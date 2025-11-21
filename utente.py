@@ -1,16 +1,31 @@
 # classe paziente 
 
 class Paziente:
-    def __init__(self, nome: str, cognome: str, cf: str, data_nascita: str, email: str = None):
-        self.nome = nome 
-        self.cognome = cognome 
+    def __init__(self, nome: str, cognome: str, cf: str, data_nascita: str = "", email: str = None):
+        self.__nome = nome 
+        self.__cognome = cognome 
         # attributi protetti 
-        self._cf = cf 
-        self._email = email 
-        self._data_nascita = data_nascita 
+        self.__cf = cf 
+        self.__email = email 
+        self.__data_nascita = data_nascita 
+        """ 
         # lista delle visite del paziente 
-        self._visite = []
+        self._visite = [] """
         
+    # Properties
+
+    @property
+    def name(self) -> str:
+        return self.__nome
+
+    @property
+    def surname(self) -> str:
+        return self.__cognome
+    
+    @property
+    def code(self) -> str:
+        return self.__cf
+
         # metodi get e set 
     def get_cf(self):
         return self._cf
@@ -30,25 +45,20 @@ class Paziente:
     def set_email(self, email: str):
         self._email = email
 
-    def aggiungi_visita(self, visita):
+    """ def aggiungi_visita(self, visita):
         # aggiunge un oggetto visita alla lista delle visite
-        self._visite.append(visita)
+        self._visite.append(visita) """
     
-    def get_visite(self):
-        return self._visite
+    """ def get_visite(self):
+        return self._visite """
     
     def info(self):
         return f"Nome: {self.nome} {self.cognome}\nCodice fiscale: {self._cf}\nData di nascita: {self._data_nascita}"
     
     def info_completa(self):
         email_info = f"\nEmail: {self._email}" if self._email else ""
-        visite_info = f"\nNumero di visite registrate: {len(self._visite)}"
-        return f"{self.info()}{email_info}{visite_info}"
- 
-'''
-p = Paziente("Mario", "Rossi", "MR123", "15/05/1985", "mario.rossi@email.com")
-print(p.info())
-print(p.info_completa())
-'''   
+        #visite_info = f"\nNumero di visite registrate: {len(self._visite)}"
+        return f"{self.info()}{email_info}"#{visite_info}"
+
 
 

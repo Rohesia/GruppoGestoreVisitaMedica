@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
 import os
-from Patience import Patience
+from Utente import Paziente as Patience
 
 class CheckUp:
     def __init__(self, date:datetime, notes:str, patience:Patience):
@@ -53,9 +53,3 @@ class CheckUp:
                     print(" | ".join(row))
         else:
             print("No visit file found.")
-
-p = Patience("Luca", "Rossi", "A123")
-check = CheckUp(datetime.now(), "Controllo pressione", p)
-check.accept()
-check.generate_file()
-check.print_from_file()
