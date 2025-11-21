@@ -28,22 +28,22 @@ class Paziente:
 
         # metodi get e set 
     def get_cf(self):
-        return self._cf
+        return self.__cf
 
     def set_cf(self, cf: str):
-        self._cf = cf
+        self.__cf = cf
 
     def get_data_nascita(self):
-        return self._data_nascita
+        return self.__data_nascita
 
     def set_data_nascita(self, data: str):
-        self._data_nascita = data
+        self.__data_nascita = data
 
     def get_email(self):
-        return self._email
+        return self.__email
 
     def set_email(self, email: str):
-        self._email = email
+        self.__email = email
 
     """ def aggiungi_visita(self, visita):
         # aggiunge un oggetto visita alla lista delle visite

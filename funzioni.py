@@ -1,5 +1,5 @@
-from utente import Paziente
-from checkup import CheckUp
+from Utente import Paziente
+from CheckUp import CheckUp
 from datetime import datetime
 # lista dei pazienti
 pazienti = []
