@@ -1,7 +1,7 @@
 import csv
 from datetime import datetime
 import os
-from Utente import Paziente as Patience
+from utente import Paziente as Patience
 
 class CheckUp:
     def __init__(self, date:datetime, notes:str, patience:Patience):
