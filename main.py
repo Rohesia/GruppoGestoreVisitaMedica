@@ -1,6 +1,21 @@
 from funzioni import *
 
-if __name__ == "__main__":  
+if __name__ == "__main__":
+
+    # TODO: creare ogni paziente da pazienti.csv e inserirli nella lista "pazienti = []""
+
+    # TODO: aggiungi_checkup dovrebbe CREARE un oggetto checkup
+
+    # TODO: accetta checkup dovrebbe chiedere il paziente, mostrare la lista dei checkup NON accettati e accettare
+
+    # TODO: mostra pazienti dovrebbe printare la lista "pazienti = []"
+
+    # TODO: mostra visite paziente dovrebbe far scegliere il paziente e richiamare CheckUp.print_by_patience(p)
+
+    # TODO: mostra visite da file lo toglierei
+
+    # TODO: scelta 7 la toglierei, basta la 5
+
     while True:
         print("\n--- Menu Gestione Pazienti ---")
         print("1. Crea nuovo paziente")
@@ -29,7 +44,7 @@ if __name__ == "__main__":
             mostra_pazienti()
             print("\n--- Visite da file ---")
             for p in pazienti:
-                print(f"\nVisite di {p.nome} {p.cognome}:")
+                print(f"\nVisite di {p.name} {p.surname}:")
                 mostra_visite_da_file_per_paziente(p)
             print("Uscita dal programma.")
             break

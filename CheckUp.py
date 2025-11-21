@@ -9,6 +9,7 @@ class CheckUp:
         self.__notes = notes
         self.__patience = patience  # instance of Patience
         self.__is_accepted = False
+        self.generate_file()
 
     # Accept the check-up
     def accept(self):

@@ -104,7 +104,7 @@ def aggiungi_checkup():
         return
     c = CheckUp(data, f"{tipo}: {note}", p)
     p.aggiungi_visita(c)
-    c.generate_file()
+    c.generate_file() #TODO: REMOVE
     print("Check-up aggiunto e registrato su file.")
 
 def accetta_checkup():
