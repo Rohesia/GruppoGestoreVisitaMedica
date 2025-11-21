@@ -67,6 +67,7 @@ def crea_paziente():
 
 # --- gestione check-up ---
 
+
 def aggiungi_checkup():
     """Crea un nuovo check-up per un paziente selezionato."""
     p = seleziona_paziente()
@@ -80,6 +81,11 @@ def aggiungi_checkup():
     except ValueError:
         print("Formato data non valido.")
         return
+
+    # crea e registra il check-up direttamente nel file CSV
+    CheckUp(data, f"{tipo}: {note}", p)
+    print("Check-up aggiunto e registrato su file.")
+
 
     # crea e registra il check-up direttamente nel file CSV
     CheckUp(data, f"{tipo}: {note}", p)
