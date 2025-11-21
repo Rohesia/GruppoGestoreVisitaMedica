@@ -8,10 +8,9 @@ if __name__ == "__main__":
         print("\n--- Menu Gestione Pazienti ---")
         print("1. Crea nuovo paziente")
         print("2. Aggiungi check-up/visita")
-        print("3. Accetta check-up")
-        print("4. Mostra pazienti")
-        print("5. Mostra visite paziente")
-        print("6. Esci")
+        print("3. Mostra pazienti")
+        print("4. Mostra visite paziente")
+        print("5. Esci")
         scelta = input("Seleziona un'opzione: ").strip()
 
         if scelta == "1":
@@ -19,10 +18,8 @@ if __name__ == "__main__":
         elif scelta == "2":
             aggiungi_checkup()
         elif scelta == "3":
-            accetta_checkup()
-        elif scelta == "4":
             mostra_pazienti()
-        elif scelta == "5":
+        elif scelta == "4":
             p = seleziona_paziente()
             if p:
                 print(f"\nVisite di {p.name} {p.surname}:")
