@@ -1,7 +1,7 @@
 from funzioni import *
 
 if __name__ == "__main__":
-    # Carica i pazienti dal file CSV all'avvio
+    # Carica i pazienti esistenti
     carica_pazienti_da_file()
 
     while True:
@@ -10,7 +10,7 @@ if __name__ == "__main__":
         print("2. Aggiungi check-up/visita")
         print("3. Accetta check-up")
         print("4. Mostra pazienti")
-        print("5. Mostra visite paziente (sessione)")
+        print("5. Mostra visite paziente")
         print("6. Esci")
         scelta = input("Seleziona un'opzione: ").strip()
 
