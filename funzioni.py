@@ -1,8 +1,63 @@
+
+import csv
 from utente import Paziente
-from checkup import CheckUp
+from CheckUp import CheckUp
 from datetime import datetime
-# lista dei pazienti
+import os
+
+# lista globale dei pazienti
 pazienti = []
+
+# gestione del paziente
+def carica_pazienti_da_file():
+    if not os.path.exists("pazienti.csv"):
+        return
+    with open("pazienti.csv", "r") as f:
+        reader = csv.DictReader(f)
+        for row in reader:
+            p = Paziente(
+                row["Nome"],
+                row["Cognome"],
+                row["CF"],
+                row["Data Nascita"],
+                row["Email"] if row["Email"] else None
+            )
+            pazienti.append(p)
+
+def salva_paziente_su_file(p: Paziente):
+    file_exists = os.path.exists("pazienti.csv")
+    with open("pazienti.csv", "a", newline="") as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(["Nome","Cognome","CF","Data Nascita","Email"])
+        writer.writerow([p.nome, p.cognome, p.get_cf(), p.get_data_nascita(), p.get_email() or ""])
+
+
+# gestione file visite
+
+def carica_visite_da_file():
+    for file in os.listdir("."):
+        if file.endswith(".csv") and file != "pazienti.csv":
+            parts = file[:-4].split("_")
+            if len(parts) == 3:
+                nome, cognome, cf = parts
+                paziente = next((p for p in pazienti if p.get_cf() == cf), None)
+                if not paziente:
+                    paziente = Paziente(nome, cognome, cf, data_nascita="N/A")
+                    pazienti.append(paziente)
+                with open(file, "r") as f:
+                    reader = csv.reader(f)
+                    next(reader)  # salta intestazione
+                    for row in reader:
+                        date_str, notes, accepted = row
+                        date = datetime.strptime(date_str, "%Y-%m-%d %H:%M")
+                        c = CheckUp(date, notes, paziente)
+                        if accepted.lower() == "yes":
+                            c.accept()
+                        paziente.aggiungi_visita(c)
+
+
+# gestione pazienti
 
 def mostra_pazienti():
     if not pazienti:
@@ -29,7 +84,11 @@ def crea_paziente():
     email = input("Email (opzionale): ").strip() or None
     p = Paziente(nome, cognome, cf, data_nascita, email)
     pazienti.append(p)
+    salva_paziente_su_file(p)
     print("Paziente creato con successo!")
+
+
+# gestione visite
 
 def aggiungi_checkup():
     p = seleziona_paziente()
@@ -47,20 +106,6 @@ def aggiungi_checkup():
     p.aggiungi_visita(c)
     c.generate_file()
     print("Check-up aggiunto e registrato su file.")
-    
-def mostra_visite_da_file():
-    p = seleziona_paziente()
-    if not p:
-        return
-    filename = f"{p.nome}_{p.cognome}_{p.get_cf()}.csv"
-    if os.path.exists(filename):
-        with open(filename, mode='r') as file:
-            reader = csv.reader(file)
-            for row in reader:
-                print(" | ".join(row))
-    else:
-        print("Nessun file visite trovato per questo paziente.")
-
 
 def accetta_checkup():
     p = seleziona_paziente()
@@ -91,3 +136,26 @@ def mostra_visite_paziente():
     for v in p.get_visite():
         status = "Accettata" if v.is_accepted else "Non accettata"
         print(f"{v.date.strftime('%Y-%m-%d %H:%M')} | {v.notes} | {status}")
+
+def mostra_visite_da_file():
+    p = seleziona_paziente()
+    if not p:
+        return
+    filename = f"{p.nome}_{p.cognome}_{p.get_cf()}.csv"
+    if os.path.exists(filename):
+        with open(filename, mode='r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                print(" | ".join(row))
+    else:
+        print("Nessun file visite trovato per questo paziente.")
+
+def mostra_visite_da_file_per_paziente(p):
+    filename = f"{p.nome}_{p.cognome}_{p.get_cf()}.csv"
+    if os.path.exists(filename):
+        with open(filename, mode='r') as file:
+            reader = csv.reader(file)
+            for row in reader:
+                print(" | ".join(row))
+    else:
+        print("Nessun file visite trovato.")

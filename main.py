@@ -1,9 +1,6 @@
-from utente import Paziente
-from checkup import CheckUp
 from funzioni import *
-from datetime import datetime
 
-def menu():
+if __name__ == "__main__":  
     while True:
         print("\n--- Menu Gestione Pazienti ---")
         print("1. Crea nuovo paziente")
@@ -12,7 +9,7 @@ def menu():
         print("4. Mostra pazienti")
         print("5. Mostra visite paziente (sessione)")
         print("6. Mostra visite paziente dal file")
-        print("7. Esci")
+        print("7. Esci e mostra tutti i file")
         scelta = input("Seleziona un'opzione: ").strip()
         
         if scelta == "1":
@@ -28,10 +25,13 @@ def menu():
         elif scelta == "6":
             mostra_visite_da_file()
         elif scelta == "7":
+            print("\n--- Dati pazienti ---")
+            mostra_pazienti()
+            print("\n--- Visite da file ---")
+            for p in pazienti:
+                print(f"\nVisite di {p.nome} {p.cognome}:")
+                mostra_visite_da_file_per_paziente(p)
             print("Uscita dal programma.")
             break
         else:
             print("Scelta non valida.")
-
-if __name__ == "__main__":
-    menu()
