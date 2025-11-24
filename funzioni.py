@@ -115,5 +115,14 @@ def mostra_visite_paziente():
     if not p:
         return
 
+    choice:int = int(input("Vuoi vederle tutte(1), solo quelle accettate(2) o solo quelle rifiutate(3)?: "))
+
+    match(choice):
+        case 1: print_checkup(p, CheckUp.print_all_by_patience)
+        case 2: print_checkup(p, CheckUp.print_accepted_by_patience)
+        case 3: print_checkup(p, CheckUp.print_not_accepted_by_patience)
+        case _: print("Wrong input")
+
+def print_checkup(p, func):
     print(f"\n--- Visite di {p.name} {p.surname} ---")
-    CheckUp.print_by_patience(p)
+    func(p)

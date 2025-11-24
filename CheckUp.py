@@ -9,11 +9,12 @@ class CheckUp:
         self.__notes = notes
         self.__patience = patience  # instance of Patience
         self.__is_accepted = False
-        self.generate_file()
+        self._load_to_file()
 
     # Accept the check-up
     def accept(self):
         self.__is_accepted = True
+        self.update_acceptance()
 
     # properties
     @property
@@ -31,9 +32,29 @@ class CheckUp:
     @property
     def is_accepted(self) -> bool:
         return self.__is_accepted
+    
+    ## METHODS ##
+
+    def update_acceptance(self):
+        filename = f"{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv"
+
+        # Read all rows
+        with open(filename, mode='r', newline='') as file:
+            reader = list(csv.reader(file))
+
+        # Find the row matching this checkup's date + notes
+        for i, row in enumerate(reader):
+            if row[0] == self.__date.strftime("%Y-%m-%d %H:%M") and row[1] == self.__notes:
+                reader[i][2] = "Yes" if self.__is_accepted else "No"
+                break
+
+        # Rewrite the file with updated rows
+        with open(filename, mode='w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(reader)
 
     # Generate CSV file if not exists
-    def load_to_file(self):
+    def _load_to_file(self):
         filename = f"./{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv" # generates filename
         file_exists = os.path.exists(filename) #checks if exists
 
@@ -45,13 +66,17 @@ class CheckUp:
 
     # Print last visit (current)
     def print(self):
-        filename = f"{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv" # takes file name
-        if os.path.exists(filename): # checks if file exists
+        filename = f"{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv"
+        if os.path.exists(filename):
             with open(filename, mode='r') as file:
-                reader = csv.reader(file) # opens a reader
-                print(" | ".join(reader[-1])) # prints last Row separated by |
+                reader = list(csv.reader(file))  # convert iterator to list
+                if len(reader) > 1:  # ensure there is at least one visit beyond header
+                    last_row = reader[-1]
+                    print(" | ".join(last_row))
+                else:
+                    print("No visits recorded yet.")
         else:
-            print(f"No visit file found for: {self.patience.name}_{self.patience.surname}.")
+            print(f"No visit file found for: {self.__patience.name}_{self.__patience.surname}.")
 
     @staticmethod
     def print_all_by_patience(patience:Patience): # static method, takes a Patience and prints its checkups
@@ -64,44 +89,86 @@ class CheckUp:
         else:
             print(f"No visit file found for: {patience.name}_{patience.surname}.")
 
+    @staticmethod
+    def print_accepted_by_patience(patience:Patience): # static method, takes a Patience and prints its checkups
+        filename = f"{patience.name}_{patience.surname}_{patience.code}.csv" # takes filename
+        if os.path.exists(filename): # checks if exists
+            with open(filename, mode='r') as file:
+                reader = csv.reader(file) # opens reader
+                for row in reader:
+                    if row[-1].strip().lower() == ("yes"):
+                        print(" | ".join(row)) # prints reader
+        else:
+            print(f"No visit file found for: {patience.name}_{patience.surname}.")
 
-# 1. Create a patient
-p = Patience("Luca", "Rossi", "A123")
-p1 = Patience("Andrea", "Marii", "B432")
-p2 = Patience("Tanja", "Marisi", "B312")
-p3 = Patience("Gianmarco", "Ottanini", "Z043")
+    @staticmethod
+    def print_not_accepted_by_patience(patience:Patience): # static method, takes a Patience and prints its checkups
+        filename = f"{patience.name}_{patience.surname}_{patience.code}.csv" # takes filename
+        if os.path.exists(filename): # checks if exists
+            with open(filename, mode='r') as file:
+                reader = csv.reader(file) # opens reader
+                for row in reader:
+                    if row[-1].strip().lower() == ("no"):
+                        print(" | ".join(row)) # prints reader
+        else:
+            print(f"No visit file found for: {patience.name}_{patience.surname}.")
 
-# 2. Create a check-up for this patient
-checkup1 = CheckUp(datetime.now(), "Routine blood test", p)
+# Create two patients
+p1 = Patience("Luca", "Rossi", "A123")
+p2 = Patience("Maria", "Bianchi", "B456")
 
-# 3. Accept the check-up
-checkup1.accept()
+# --- Patient 1: 5 visits, 4 accepted ---
+visits_p1 = [
+    ("Routine blood test", True),
+    ("Follow-up visit", True),
+    ("X-ray check", True),
+    ("Specialist consultation", False),
+    ("Final clearance", True),
+]
 
-# 4. Generate the CSV file (creates or appends)
-checkup1.generate_file()
+for notes, accepted in visits_p1:
+    c = CheckUp(datetime.now(), notes, p1)
+    if accepted:
+        c.accept()
+    # file writing happens automatically in __init__
 
-# 5. Print all visits from the file
-print("Visits for patient Luca Rossi:")
-checkup1.print_from_file()
+# --- Patient 2: 5 visits, 3 accepted ---
+visits_p2 = [
+    ("Initial check", True),
+    ("Blood pressure monitoring", False),
+    ("Diet consultation", True),
+    ("Cardiology exam", False),
+    ("Final report", True),
+]
 
-# 6. Create other 2 check-up for different patiences
-checkup2 = CheckUp(datetime.now(), "Dental Analysis", p1)
-checkup2.accept()
-checkup2.generate_file()
-checkup3 = CheckUp(datetime.now(), "Follow-up visit", p3)
-checkup3.accept()
-checkup3.generate_file()
+for notes, accepted in visits_p2:
+    c = CheckUp(datetime.now(), notes, p2)
+    if accepted:
+        c.accept()
 
-# 7. Generate a different CheckUp for the same patience
-checkup2 = CheckUp(datetime.now(), "Follow-up visit", p)
-checkup2.accept()
-checkup2.generate_file()
+# --- Demonstrations ---
+print("\n=== All visits for Luca Rossi ===")
+CheckUp.print_all_by_patience(p1)
 
-checkup1.print_from_file()
-checkup2.print_from_file()
-checkup3.print_from_file()
+print("\n=== Accepted visits for Luca Rossi ===")
+CheckUp.print_accepted_by_patience(p1)
 
-# 8. Print again to see both visits
-print("\nUpdated visits for patient Luca Rossi:")
-CheckUp.print_by_patience(patience=p)
-CheckUp.print_by_patience(patience=p2)
+print("\n=== Not accepted visits for Luca Rossi ===")
+CheckUp.print_not_accepted_by_patience(p1)
+
+print("\n=== Last visit for Luca Rossi ===")
+c.print()  # last created checkup for p1
+
+print("\n=== All visits for Maria Bianchi ===")
+CheckUp.print_all_by_patience(p2)
+
+print("\n=== Accepted visits for Maria Bianchi ===")
+CheckUp.print_accepted_by_patience(p2)
+
+print("\n=== Not accepted visits for Maria Bianchi ===")
+CheckUp.print_not_accepted_by_patience(p2)
+
+print("\n=== Last visit for Maria Bianchi ===")
+c2 = CheckUp(datetime.now(), "Temporary check", p2)
+c2.accept()
+c2.print()
