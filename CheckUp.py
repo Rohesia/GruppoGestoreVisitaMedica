@@ -34,28 +34,27 @@ class CheckUp:
 
     # Generate CSV file if not exists
     def load_to_file(self):
-        filename = f"./{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv"
-        file_exists = os.path.exists(filename)
+        filename = f"./{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv" # generates filename
+        file_exists = os.path.exists(filename) #checks if exists
 
         with open(filename, mode='a', newline='') as file:
             writer = csv.writer(file)
-            if not file_exists:
+            if not file_exists: # if file not exists, creates it + first row
                 writer.writerow(["Date", "Notes", "Accepted"])
-            writer.writerow([self.__date.strftime("%Y-%m-%d %H:%M"), self.__notes,"Yes" if self.__is_accepted else "No"])
+            writer.writerow([self.__date.strftime("%Y-%m-%d %H:%M"), self.__notes,"Yes" if self.__is_accepted else "No"]) # loads checkup
 
-    # Print all visits from file
-    def print_from_file(self):
+    # Print last visit (current)
+    def print(self):
         filename = f"{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv" # takes file name
         if os.path.exists(filename): # checks if file exists
             with open(filename, mode='r') as file:
                 reader = csv.reader(file) # opens a reader
-                for row in reader:
-                    print(" | ".join(row)) # prints each Row separated by |
+                print(" | ".join(reader[-1])) # prints last Row separated by |
         else:
             print(f"No visit file found for: {self.patience.name}_{self.patience.surname}.")
-    
+
     @staticmethod
-    def print_by_patience(patience:Patience): # static method, takes a Patience and prints its checkups
+    def print_all_by_patience(patience:Patience): # static method, takes a Patience and prints its checkups
         filename = f"{patience.name}_{patience.surname}_{patience.code}.csv" # takes filename
         if os.path.exists(filename): # checks if exists
             with open(filename, mode='r') as file:
