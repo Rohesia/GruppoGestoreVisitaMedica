@@ -9,7 +9,8 @@ if __name__ == "__main__":
         print("1. Crea nuovo paziente")
         print("2. Aggiungi check-up/visita")
         print("3. Mostra pazienti")
-        print("4. Esci")
+        print("4. Mostra visite di un paziente")
+        print("5. Esci")
         scelta = input("Seleziona un'opzione: ").strip()
 
         if scelta == "1":
@@ -19,6 +20,8 @@ if __name__ == "__main__":
         elif scelta == "3":
             mostra_pazienti()
         elif scelta == "4":
+            mostra_visite_paziente()
+        elif scelta == "5":
             print("Uscita dal programma.")
             break
         else:

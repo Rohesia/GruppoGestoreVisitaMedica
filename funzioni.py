@@ -6,10 +6,10 @@ from datetime import datetime
 from utente import Paziente
 from CheckUp import CheckUp
 
-# lista globale dei pazienti
+# lista pazienti
 pazienti = []
 
-# --- PAZIENTI ---
+# carica pazienti dal file
 def carica_pazienti_da_file():
     if not os.path.exists("pazienti.csv"):
         return
@@ -22,6 +22,7 @@ def carica_pazienti_da_file():
             )
             pazienti.append(p)
 
+# salva un paziente su file
 def salva_paziente_su_file(p: Paziente):
     file_exists = os.path.exists("pazienti.csv")
     with open("pazienti.csv", "a", newline="") as f:
@@ -30,6 +31,7 @@ def salva_paziente_su_file(p: Paziente):
             writer.writerow(["Nome", "Cognome", "CF", "Data Nascita", "Email"])
         writer.writerow([p.name, p.surname, p.code, p.birth, p.email or ""])
 
+# mostra lista pazienti
 def mostra_pazienti():
     if not pazienti:
         print("Nessun paziente registrato.")
@@ -37,6 +39,7 @@ def mostra_pazienti():
     for i, p in enumerate(pazienti, 1):
         print(f"{i}. {p.info_completa()}")
 
+# seleziona paziente
 def seleziona_paziente():
     mostra_pazienti()
     if not pazienti:
@@ -49,7 +52,7 @@ def seleziona_paziente():
 
     return pazienti[int(s)-1]
 
-# --- CREAZIONE PAZIENTE  ---
+# crea nuovo paziente
 def crea_paziente():
     nome = input("Nome: ")
     cognome = input("Cognome: ")
@@ -57,11 +60,12 @@ def crea_paziente():
     nascita = input("Data di nascita (GG/MM/AAAA): ")
     email = input("Email: ").strip() or None
 
-    # crea oggetto Paziente e salva su file
+    # crea oggetto
     p = Paziente(nome, cognome, cf, nascita, email)
     pazienti.append(p)
     salva_paziente_su_file(p)
 
+    # prima visita
     print("\n--- Prima visita ---")
     data_str = input("Data (AAAA-MM-GG HH:MM): ")
     tipo = input("Tipo visita: ")
@@ -74,14 +78,14 @@ def crea_paziente():
         print("Formato data errato.")
         return
     
-    # crea check-up e salva
+    # crea check-up
     check = CheckUp(d, f"{tipo}: {note}", p)
     if acc == "s":
         check.accept()
 
     print("Paziente creato + prima visita registrata.")
 
-# --- AGGIUNTA CHECK-UP SUCCESSIVI ---
+# aggiunge un checkup
 def aggiungi_checkup():
     p = seleziona_paziente()
     if not p:
@@ -98,7 +102,18 @@ def aggiungi_checkup():
         print("Data errata.")
         return
 
+    # crea check-up
     check = CheckUp(d, f"{tipo}: {note}", p)
     if acc == "s":
         check.accept()
+
     print("Check-up aggiunto.")
+
+# mostra visite di un paziente
+def mostra_visite_paziente():
+    p = seleziona_paziente()
+    if not p:
+        return
+
+    print(f"\n--- Visite di {p.name} {p.surname} ---")
+    CheckUp.print_by_patience(p)
