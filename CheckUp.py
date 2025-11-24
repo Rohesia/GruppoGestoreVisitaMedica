@@ -107,6 +107,7 @@ class CheckUp:
         if os.path.exists(filename): # checks if exists
             with open(filename, mode='r') as file:
                 reader = csv.reader(file) # opens reader
+                reader = csv.reader(file) # opens reader
                 for row in reader:
                     if row[-1].strip().lower() == ("no"):
                         print(" | ".join(row)) # prints reader
