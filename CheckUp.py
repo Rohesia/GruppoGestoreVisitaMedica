@@ -32,9 +32,8 @@ class CheckUp:
     def is_accepted(self) -> bool:
         return self.__is_accepted
 
-
     # Generate CSV file if not exists
-    def generate_file(self):
+    def load_to_file(self):
         filename = f"./{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv"
         file_exists = os.path.exists(filename)
 
@@ -46,23 +45,23 @@ class CheckUp:
 
     # Print all visits from file
     def print_from_file(self):
-        filename = f"{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv"
-        if os.path.exists(filename):
+        filename = f"{self.__patience.name}_{self.__patience.surname}_{self.__patience.code}.csv" # takes file name
+        if os.path.exists(filename): # checks if file exists
             with open(filename, mode='r') as file:
-                reader = csv.reader(file)
+                reader = csv.reader(file) # opens a reader
                 for row in reader:
-                    print(" | ".join(row))
+                    print(" | ".join(row)) # prints each Row separated by |
         else:
             print(f"No visit file found for: {self.patience.name}_{self.patience.surname}.")
     
     @staticmethod
-    def print_by_patience(patience:Patience):
-        filename = f"{patience.name}_{patience.surname}_{patience.code}.csv"
-        if os.path.exists(filename):
+    def print_by_patience(patience:Patience): # static method, takes a Patience and prints its checkups
+        filename = f"{patience.name}_{patience.surname}_{patience.code}.csv" # takes filename
+        if os.path.exists(filename): # checks if exists
             with open(filename, mode='r') as file:
-                reader = csv.reader(file)
+                reader = csv.reader(file) # opens reader
                 for row in reader:
-                    print(" | ".join(row))
+                    print(" | ".join(row)) # prints reader
         else:
             print(f"No visit file found for: {patience.name}_{patience.surname}.")
 
