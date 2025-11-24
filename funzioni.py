@@ -78,7 +78,6 @@ def crea_paziente():
     check = CheckUp(d, f"{tipo}: {note}", p)
     if acc == "s":
         check.accept()
-    check.save()
 
     print("Paziente creato + prima visita registrata.")
 
@@ -102,5 +101,4 @@ def aggiungi_checkup():
     check = CheckUp(d, f"{tipo}: {note}", p)
     if acc == "s":
         check.accept()
-    check.save()
     print("Check-up aggiunto.")
