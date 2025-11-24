@@ -4,11 +4,11 @@ import os
 from utente import Paziente as Patience
 
 class CheckUp:
-    def __init__(self, date:datetime, notes:str, patience:Patience):
+    def __init__(self, date:datetime, notes:str, patience:Patience, accepted:bool = False):
         self.__date = date
         self.__notes = notes
         self.__patience = patience  # instance of Patience
-        self.__is_accepted = False
+        self.__is_accepted = accepted
         self._load_to_file()
 
     # Accept the check-up
@@ -128,9 +128,7 @@ visits_p1 = [
 ]
 
 for notes, accepted in visits_p1:
-    c = CheckUp(datetime.now(), notes, p1)
-    if accepted:
-        c.accept()
+    c = CheckUp(datetime.now(), notes, p1, accepted)
     # file writing happens automatically in __init__
 
 # --- Patient 2: 5 visits, 3 accepted ---
@@ -143,9 +141,7 @@ visits_p2 = [
 ]
 
 for notes, accepted in visits_p2:
-    c = CheckUp(datetime.now(), notes, p2)
-    if accepted:
-        c.accept()
+    c = CheckUp(datetime.now(), notes, p2, accepted)
 
 # --- Demonstrations ---
 print("\n=== All visits for Luca Rossi ===")

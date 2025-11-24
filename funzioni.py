@@ -72,16 +72,18 @@ def crea_paziente():
     note = input("Note: ")
     acc = input("Accettata? (s/n): ").lower()
 
-    try:
-        d = datetime.strptime(data_str, "%Y-%m-%d %H:%M")
-    except ValueError:
-        print("Formato data errato.")
-        return
-    
+    value_error = False
+    while value_error:
+        try:
+            d = datetime.strptime(data_str, "%Y-%m-%d %H:%M")
+            value_error = False
+        except ValueError:
+            print("Formato data errato.")
+            data_str = input("Data (AAAA-MM-GG HH:MM): ")
+            value_error = True
+
     # crea check-up
-    check = CheckUp(d, f"{tipo}: {note}", p)
-    if acc == "s":
-        check.accept()
+    check = CheckUp(d, f"{tipo}: {note}", p, acc)
 
     print("Paziente creato + prima visita registrata.")
 
